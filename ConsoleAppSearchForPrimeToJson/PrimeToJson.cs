@@ -7,7 +7,9 @@
     public TimeSpan CalculationDuration { get; set; }
 
     public ulong NumberOfPrimes { get; set; } = 0;
-    public List<ulong> Primes { get; set; } = [];
+    public ulong FirstPrime { get; set; } = 0;
+    public ulong LastPrime { get; set; } = 0;
+    public List<ulong> Primes { get; set; } = new List<ulong>();
 
     public PrimeToJson() { }
   }
