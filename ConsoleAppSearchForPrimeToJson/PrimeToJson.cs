@@ -7,6 +7,7 @@ namespace ConsoleAppSearchForPrimeToJson
     public string FileVersion { get; set; } = "1.0";
     public DateTime StartCalculationDate { get; set; } = DateTime.Now;
     public DateTime EndCalculationDate { get; set; } = DateTime.Now;
+    public Enumerations.CalculationType CalculationType { get; set; } = Enumerations.CalculationType.Ulong;
 
     public TimeSpan CalculationDuration { get; set; } = TimeSpan.Zero;
     public ulong NumberOfPrimes { get; set; } = 0;
