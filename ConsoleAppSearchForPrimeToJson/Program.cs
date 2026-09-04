@@ -9,6 +9,7 @@ namespace ConsoleAppSearchForPrimeToJson
       Action<string> display = Console.WriteLine;
       display("Calcul des nombres premiers et enregistrement dans un fichier JSON");
       const string fileName = "primes_2.json";
+      const string filenameTemplate = "primes_{0}.json";
       string json = File.Exists(fileName) ? File.ReadAllText(fileName) : string.Empty;
       const string currentFileNameTextFile = "primes-current-Filename.txt";
       string currentFileName = File.Exists(currentFileNameTextFile) ? File.ReadAllText(currentFileNameTextFile) : string.Empty;
@@ -30,11 +31,19 @@ namespace ConsoleAppSearchForPrimeToJson
       {
         primes = JsonSerializer.Deserialize<PrimeToJson>(json);
       }
+      else
+      {
+        primes.FirstPrime = 1;
+        primes.LastPrime = 1;
+        primes.StartCalculationDate = DateTime.Now;
+        primes.PreviousFileName = fileName;
+      }
 
       const ulong maxcounter = 5_000;
       if (primes.LastPrime == 1)
       {
         primes.LastPrime = 2;
+        primes.FirstPrime = 2;
       }
       else if ((primes.LastPrime) % 2 != 0)
       {
@@ -44,6 +53,7 @@ namespace ConsoleAppSearchForPrimeToJson
       ulong startNumber = primes.LastPrime;
       primes.LastPrime = startNumber;
       primes.StartCalculationDate = DateTime.Now;
+      primes.FirstPrime = startNumber;
       for (ulong number = startNumber; number < startNumber + maxcounter; number++)
       {
         if (IsPrime(number))
@@ -56,6 +66,9 @@ namespace ConsoleAppSearchForPrimeToJson
       primes.EndCalculationDate = DateTime.Now;
       primes.CalculationDuration = primes.EndCalculationDate - primes.StartCalculationDate;
       primes.NumberOfPrimes = (ulong)primes.Primes.Count;
+      primes.PreviousFileName = currentFileName;
+      primes.NextFileName = string.Format(filenameTemplate, primes.LastPrime);
+      primes.CalculationType = nameof(Enumerations.CalculationType.Ulong);
       // Save the updated primes to the JSON file
       try
       {
