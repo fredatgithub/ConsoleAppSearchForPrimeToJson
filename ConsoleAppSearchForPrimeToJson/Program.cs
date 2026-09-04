@@ -54,6 +54,9 @@ namespace ConsoleAppSearchForPrimeToJson
       primes.LastPrime = startNumber;
       primes.StartCalculationDate = DateTime.Now;
       primes.FirstPrime = startNumber;
+      Console.WriteLine($"Starting prime calculation from {startNumber} for {maxcounter} numbers...");
+      Console.WriteLine("Calculating primes...");
+
       for (ulong number = startNumber; number < startNumber + maxcounter; number++)
       {
         if (IsPrime(number))
