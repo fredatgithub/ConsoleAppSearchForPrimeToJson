@@ -11,8 +11,8 @@ namespace ConsoleAppSearchForPrimeToJson
 
     public TimeSpan CalculationDuration { get; set; } = TimeSpan.Zero;
     public ulong NumberOfPrimes { get; set; } = 0;
-    public ulong FirstPrime { get; set; } = 0;
-    public ulong LastPrime { get; set; } = 0;
+    public ulong FirstPrime { get; set; } = 1;
+    public ulong LastPrime { get; set; } = 1;
     public List<ulong> Primes { get; set; } = new List<ulong>();
 
     public string PreviousFileName { get; set; } = string.Empty;
