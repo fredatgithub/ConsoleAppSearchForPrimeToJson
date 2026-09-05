@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ConsoleAppSearchForPrimeToJson
 {
@@ -21,7 +22,7 @@ namespace ConsoleAppSearchForPrimeToJson
         }
         catch (Exception exception)
         {
-          Console.WriteLine($"Error writing to file {currentFileNameTextFile}: {exception.Message}");
+          display($"Error writing to file {currentFileNameTextFile}: {exception.Message}");
         }
       }
 
@@ -36,15 +37,14 @@ namespace ConsoleAppSearchForPrimeToJson
       {
         primes.FirstPrime = 1;
         primes.LastPrime = 1;
-        primes.StartCalculationDate = DateTime.Now;
-        primes.PreviousFileName = fileName;
+        primes.PreviousFileName = string.Empty;
       }
 
       const ulong maxcounter = 100_000;
       if (primes.LastPrime == 1)
       {
-        primes.LastPrime = 2;
         primes.FirstPrime = 2;
+        primes.LastPrime = 2;
       }
       else if ((primes.LastPrime) % 2 == 0)
       {
@@ -61,22 +61,31 @@ namespace ConsoleAppSearchForPrimeToJson
       if (IsPrime(startNumber))
       {
         primes.FirstPrime = startNumber;
+        primes.Primes.Add(startNumber);
       }
       else
       {
-        ulong nextPrime = GetNextOddNumber(startNumber );
+        ulong nextPrime = GetNextOddNumber(startNumber);
         while (!IsPrime(nextPrime))
         {
           nextPrime += 2;
         }
-      
+
         primes.FirstPrime = nextPrime;
       }
 
       Console.WriteLine($"Starting prime calculation from {startNumber} for {maxcounter} numbers...");
       Console.WriteLine("Calculating primes...");
+      if (startNumber == 2)
+      {
+        startNumber = 3;
+      }
+      else
+      {
+        startNumber += 2;
+      }
 
-      for (ulong number = primes.FirstPrime + 2; number < startNumber + maxcounter; number += 2)
+      for (ulong number = startNumber; number < startNumber + maxcounter; number += 2)
       {
         if (IsPrime(number))
         {
