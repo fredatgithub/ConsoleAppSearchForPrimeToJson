@@ -120,8 +120,8 @@ namespace ConsoleAppSearchForPrimeToJson
         display($"Error writing to file {primes.CurrentFileName}: {exception.Message}");
       }
 
-      display("Press any key to exit:");
-      Console.ReadKey();
+      //display("Press any key to exit:");
+      //Console.ReadKey();
     }
 
     private static ulong GetNextOddNumber(ulong startNumber)
