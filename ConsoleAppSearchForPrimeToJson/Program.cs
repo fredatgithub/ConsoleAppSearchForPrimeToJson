@@ -30,6 +30,7 @@ namespace ConsoleAppSearchForPrimeToJson
       if (!firstTime)
       {
         primes = JsonSerializer.Deserialize<PrimeToJson>(json);
+        primes.PreviousFileName = fileName;
       }
       else
       {
@@ -54,14 +55,28 @@ namespace ConsoleAppSearchForPrimeToJson
         primes.LastPrime += 2;
       }
 
-        ulong startNumber = primes.LastPrime;
+      ulong startNumber = primes.LastPrime;
       primes.LastPrime = startNumber;
       primes.StartCalculationDate = DateTime.Now;
-      primes.FirstPrime = startNumber;
+      if (IsPrime(startNumber))
+      {
+        primes.FirstPrime = startNumber;
+      }
+      else
+      {
+        ulong nextPrime = GetNextOddNumber(startNumber );
+        while (!IsPrime(nextPrime))
+        {
+          nextPrime += 2;
+        }
+      
+        primes.FirstPrime = nextPrime;
+      }
+
       Console.WriteLine($"Starting prime calculation from {startNumber} for {maxcounter} numbers...");
       Console.WriteLine("Calculating primes...");
 
-      for (ulong number = startNumber; number < startNumber + maxcounter; number++)
+      for (ulong number = primes.FirstPrime + 2; number < startNumber + maxcounter; number += 2)
       {
         if (IsPrime(number))
         {
@@ -90,6 +105,18 @@ namespace ConsoleAppSearchForPrimeToJson
 
       display("Press any key to exit:");
       Console.ReadKey();
+    }
+
+    private static ulong GetNextOddNumber(ulong startNumber)
+    {
+      if (startNumber % 2 == 0)
+      {
+        return startNumber + 1;
+      }
+      else
+      {
+        return startNumber + 2;
+      }
     }
 
     private static bool IsPrime(ulong number)
