@@ -45,7 +45,7 @@ namespace ConsoleAppSearchForPrimeToJson
         primes.CurrentFileName = fileName;
       }
 
-      const ulong maxcounter = 1_000_000;
+      const ulong maxcounter = 10_000_000;
       if (primes.LastPrime == 1)
       {
         primes.FirstPrime = 2;
