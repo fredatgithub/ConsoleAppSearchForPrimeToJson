@@ -29,14 +29,17 @@ namespace ConsoleAppSearchForPrimeToJson
       var primes = new PrimeToJson();
       if (!firstTime)
       {
+        // get the latest file and deserialize it
+        
         primes = JsonSerializer.Deserialize<PrimeToJson>(json);
-        primes.PreviousFileName = fileName;
+        primes.PreviousFileName = "primes_2.json";
       }
       else
       {
         primes.FirstPrime = 1;
         primes.LastPrime = 1;
         primes.PreviousFileName = string.Empty;
+        primes.CurrentFileName = fileName;
       }
 
       const ulong maxcounter = 100_000;
@@ -103,7 +106,7 @@ namespace ConsoleAppSearchForPrimeToJson
       try
       {
         string updatedJson = JsonSerializer.Serialize(primes, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(fileName, updatedJson);
+        File.WriteAllText(primes.CurrentFileName, updatedJson);
         display($"Primes saved to {fileName}");
       }
       catch (Exception exception)

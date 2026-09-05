@@ -17,6 +17,7 @@ namespace ConsoleAppSearchForPrimeToJson
 
     public string PreviousFileName { get; set; } = string.Empty;
     public string NextFileName { get; set; } = string.Empty;
+    public string CurrentFileName { get; set; } = "primes_2.json";
 
     public override string ToString()
     {
