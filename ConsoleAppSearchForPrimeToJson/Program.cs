@@ -8,7 +8,7 @@ namespace ConsoleAppSearchForPrimeToJson
     {
       Action<string> display = Console.WriteLine;
       display("Calcul des nombres premiers et enregistrement dans un fichier JSON");
-      const string fileName = "primes_2.json";
+      string fileName = GetNextFileName(string.Empty); // "primes_2.json";
       const string filenameTemplate = "primes_{0}.json";
       string json = File.Exists(fileName) ? File.ReadAllText(fileName) : string.Empty;
       const string currentFileNameTextFile = "primes-current-Filename.txt";
@@ -39,18 +39,22 @@ namespace ConsoleAppSearchForPrimeToJson
         primes.PreviousFileName = fileName;
       }
 
-      const ulong maxcounter = 5_000;
+      const ulong maxcounter = 100_000;
       if (primes.LastPrime == 1)
       {
         primes.LastPrime = 2;
         primes.FirstPrime = 2;
       }
-      else if ((primes.LastPrime) % 2 != 0)
+      else if ((primes.LastPrime) % 2 == 0)
       {
         primes.LastPrime += 1;
       }
+      else
+      {
+        primes.LastPrime += 2;
+      }
 
-      ulong startNumber = primes.LastPrime;
+        ulong startNumber = primes.LastPrime;
       primes.LastPrime = startNumber;
       primes.StartCalculationDate = DateTime.Now;
       primes.FirstPrime = startNumber;
