@@ -145,7 +145,7 @@ namespace ConsoleAppSearchForPrimeToJson
       else
       {
         display("Restarting application...");
-        Thread.Sleep(5000); // Wait for 5 seconds before restarting
+        //Thread.Sleep(5000); // Wait for 5 seconds before restarting
         RestartApplication();
       }
     }
