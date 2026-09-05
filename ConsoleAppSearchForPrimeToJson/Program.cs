@@ -30,9 +30,11 @@ namespace ConsoleAppSearchForPrimeToJson
       if (!firstTime)
       {
         // get the latest file and deserialize it
-        
-        primes = JsonSerializer.Deserialize<PrimeToJson>(json);
-        primes.PreviousFileName = "primes_2.json";
+        var beforeLastPrimes = GetLatestPrimesFromJsonFiles(GetAllJsonFilesInDirectory());
+        primes.PreviousFileName = beforeLastPrimes.CurrentFileName;
+        primes.FirstPrime = beforeLastPrimes.LastPrime;
+        primes.LastPrime = beforeLastPrimes.LastPrime;
+        primes.CurrentFileName = string.Format(filenameTemplate, beforeLastPrimes.LastPrime);
       }
       else
       {
@@ -99,7 +101,11 @@ namespace ConsoleAppSearchForPrimeToJson
       primes.EndCalculationDate = DateTime.Now;
       primes.CalculationDuration = primes.EndCalculationDate - primes.StartCalculationDate;
       primes.NumberOfPrimes = (ulong)primes.Primes.Count;
-      primes.PreviousFileName = currentFileName;
+      if (string.IsNullOrEmpty(primes.PreviousFileName))
+      {
+        primes.PreviousFileName = currentFileName;
+      }
+      
       primes.NextFileName = string.Format(filenameTemplate, primes.LastPrime);
       primes.CalculationType = nameof(Enumerations.CalculationType.Ulong);
       // Save the updated primes to the JSON file
@@ -107,11 +113,11 @@ namespace ConsoleAppSearchForPrimeToJson
       {
         string updatedJson = JsonSerializer.Serialize(primes, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(primes.CurrentFileName, updatedJson);
-        display($"Primes saved to {fileName}");
+        display($"Primes saved to {primes.CurrentFileName}");
       }
       catch (Exception exception)
       {
-        display($"Error writing to file {fileName}: {exception.Message}");
+        display($"Error writing to file {primes.CurrentFileName}: {exception.Message}");
       }
 
       display("Press any key to exit:");
@@ -245,9 +251,9 @@ namespace ConsoleAppSearchForPrimeToJson
       Console.WriteLine($"Calculation Type: {primes.CalculationType}");
     }
 
-    private static string[] GetAllJsonFilesInDirectory()
+    private static string[] GetAllJsonFilesInDirectory(string pattern = "primes_*.json")
     {
-      string[] jsonFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.json");
+      string[] jsonFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), pattern);
       return jsonFiles;
     }
 
