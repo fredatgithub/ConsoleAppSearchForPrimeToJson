@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 
 namespace ConsoleAppSearchForPrimeToJson
 {
@@ -44,7 +45,7 @@ namespace ConsoleAppSearchForPrimeToJson
         primes.CurrentFileName = fileName;
       }
 
-      const ulong maxcounter = 100_000;
+      const ulong maxcounter = 1_000_000;
       if (primes.LastPrime == 1)
       {
         primes.FirstPrime = 2;
@@ -89,7 +90,19 @@ namespace ConsoleAppSearchForPrimeToJson
         startNumber += 2;
       }
 
-      for (ulong number = startNumber; number < startNumber + maxcounter; number += 2)
+      ulong endNumber;
+      bool stopCalculation = false;
+      if (startNumber + maxcounter > ulong.MaxValue) // Check for overflow
+      {
+        endNumber = ulong.MaxValue;
+        stopCalculation = true;
+      }
+      else
+      {
+        endNumber = startNumber + maxcounter;
+      }
+
+      for (ulong number = startNumber; number < endNumber; number += 2)
       {
         if (IsPrime(number))
         {
@@ -105,7 +118,7 @@ namespace ConsoleAppSearchForPrimeToJson
       {
         primes.PreviousFileName = currentFileName;
       }
-      
+
       primes.NextFileName = string.Format(filenameTemplate, primes.LastPrime);
       primes.CalculationType = nameof(Enumerations.CalculationType.Ulong);
       // Save the updated primes to the JSON file
@@ -120,8 +133,34 @@ namespace ConsoleAppSearchForPrimeToJson
         display($"Error writing to file {primes.CurrentFileName}: {exception.Message}");
       }
 
-      //display("Press any key to exit:");
-      //Console.ReadKey();
+     
+      Console.WriteLine("Fin de l'application.");
+      
+      if (stopCalculation)
+      {
+        display($"Maximum number reached for ulong values: {ulong.MaxValue}. Continue with BigInteger");
+        display("Press any key to exit:");
+        Console.ReadKey();
+      }
+      else
+      {
+        display("Restarting application...");
+        Thread.Sleep(5000); // Wait for 5 seconds before restarting
+        RestartApplication();
+      }
+    }
+
+    private static void RestartApplication()
+    {
+      string? processPath = Environment.ProcessPath ?? throw new InvalidOperationException("Impossible de déterminer le chemin de l'exécutable.");
+
+      Process.Start(new ProcessStartInfo
+      {
+        FileName = processPath,
+        UseShellExecute = false
+      });
+
+      Environment.Exit(0);
     }
 
     private static ulong GetNextOddNumber(ulong startNumber)
