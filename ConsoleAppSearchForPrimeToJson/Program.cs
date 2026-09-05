@@ -93,7 +93,8 @@ namespace ConsoleAppSearchForPrimeToJson
       if (number < 2) return false;
       if (number == 2) return true;
       if (number % 2 == 0) return false;
-      for (ulong i = 3; i <= Math.Sqrt(number); i += 2)
+      double squareRoot = Math.Sqrt(number);
+      for (ulong i = 3; i <= squareRoot; i += 2)
       {
         if (number % i == 0) return false;
       }
