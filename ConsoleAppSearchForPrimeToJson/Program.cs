@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
 using System.Text.Json;
+using ClassLibraryHelper;
 
 namespace ConsoleAppSearchForPrimeToJson
 {
@@ -64,7 +65,7 @@ namespace ConsoleAppSearchForPrimeToJson
       ulong startNumber = primes.LastPrime;
       primes.LastPrime = startNumber;
       primes.StartCalculationDate = DateTime.Now;
-      if (IsPrime(startNumber))
+      if (Helper.IsPrime(startNumber))
       {
         primes.FirstPrime = startNumber;
         primes.Primes.Add(startNumber);
@@ -72,7 +73,7 @@ namespace ConsoleAppSearchForPrimeToJson
       else
       {
         ulong nextPrime = GetNextOddNumber(startNumber);
-        while (!IsPrime(nextPrime))
+        while (!Helper.IsPrime(nextPrime))
         {
           nextPrime += 2;
         }
@@ -105,7 +106,7 @@ namespace ConsoleAppSearchForPrimeToJson
 
       for (ulong number = startNumber; number < endNumber; number += 2)
       {
-        if (IsPrime(number))
+        if (Helper.IsPrime(number))
         {
           primes.Primes.Add(number);
           primes.LastPrime = number;
@@ -174,20 +175,6 @@ namespace ConsoleAppSearchForPrimeToJson
       {
         return startNumber + 2;
       }
-    }
-
-    private static bool IsPrime(ulong number)
-    {
-      if (number < 2) return false;
-      if (number == 2) return true;
-      if (number % 2 == 0) return false;
-      double squareRoot = Math.Sqrt(number);
-      for (ulong i = 3; i <= squareRoot; i += 2)
-      {
-        if (number % i == 0) return false;
-      }
-
-      return true;
     }
 
     private static string GetNextFileName(string currentFileName)
