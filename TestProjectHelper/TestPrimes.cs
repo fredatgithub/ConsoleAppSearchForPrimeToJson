@@ -53,6 +53,8 @@ namespace TestProjectHelper
     }
 
     [TestMethod]
+    [DataRow(0UL, false)]
+    [DataRow(1UL, false)]
     [DataRow(2UL, true)]
     [DataRow(3UL, true)]
     [DataRow(4UL, false)]
@@ -72,6 +74,10 @@ namespace TestProjectHelper
     [DataRow(18UL, false)]
     [DataRow(19UL, true)]
     [DataRow(20UL, false)]
+    [DataRow(7919UL, true)]
+    [DataRow(104729UL, true)]
+    [DataRow(100000UL, false)]
+    [DataRow(123456UL, false)]
     public void TestMethod_DataDriven(ulong number, bool expected)
     {
       bool result = Helper.IsPrime(number);
