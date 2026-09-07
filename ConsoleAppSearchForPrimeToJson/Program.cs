@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using System.Text.Json;
 
 namespace ConsoleAppSearchForPrimeToJson
@@ -79,7 +80,7 @@ namespace ConsoleAppSearchForPrimeToJson
         primes.FirstPrime = nextPrime;
       }
 
-      Console.WriteLine($"Starting prime calculation from {startNumber} for {maxcounter} numbers...");
+      Console.WriteLine($"Starting prime calculation from {startNumber.ToString("N0", new CultureInfo("fr-FR"))} for {maxcounter.ToString("N0", new CultureInfo("fr-FR"))} numbers...");
       Console.WriteLine("Calculating primes...");
       if (startNumber == 2)
       {
