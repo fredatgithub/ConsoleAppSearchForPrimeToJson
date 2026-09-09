@@ -94,7 +94,7 @@ namespace ConsoleAppSearchForPrimeToJson
 
       ulong endNumber;
       bool stopCalculation = false;
-      if (startNumber + maxcounter > ulong.MaxValue) // Check for overflow
+      if (startNumber + maxcounter > ulong.MaxValue) // Check for overflow after 18 446 744 073 709 551 615
       {
         endNumber = ulong.MaxValue;
         stopCalculation = true;
