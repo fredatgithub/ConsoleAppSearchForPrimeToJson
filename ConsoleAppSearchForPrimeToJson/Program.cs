@@ -149,13 +149,13 @@ namespace ConsoleAppSearchForPrimeToJson
       {
         string updatedJson = JsonSerializer.Serialize(primes, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(primes.CurrentFileName, updatedJson);
+        File.WriteAllText(currentFileNameTextFile, primes.CurrentFileName);
         display($"Primes saved to {primes.CurrentFileName}");
       }
       catch (Exception exception)
       {
         display($"Error writing to file {primes.CurrentFileName}: {exception.Message}");
       }
-
      
       Console.WriteLine("Fin de l'application.");
       
