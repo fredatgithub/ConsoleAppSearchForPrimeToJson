@@ -11,16 +11,37 @@ namespace ConsoleAppSearchForPrimeToJson
     {
       Action<string> display = Console.WriteLine;
       display("Calcul des nombres premiers et enregistrement dans un fichier JSON");
-      string fileName = GetNextFileName(string.Empty); // "primes_2.json";
+      int numberOfJsonFiles = GetAllJsonFilesInDirectory().Length;
+      Console.WriteLine($"Number of JSON files: {numberOfJsonFiles}");
+      string filename = string.Empty;
+      if (numberOfJsonFiles > 0)
+      {
+        string[] jsonFiles = GetAllJsonFilesInDirectory();
+        string[] primeJsonFiles = RemoveNonPrimeJsonFiles(jsonFiles);
+        numberOfJsonFiles = primeJsonFiles.Length;
+        Console.WriteLine($"Number of prime JSON files: {numberOfJsonFiles}");
+        if (numberOfJsonFiles > 0)
+        {
+          filename = GetLatestPrimesFromJsonFiles(primeJsonFiles).CurrentFileName;
+          Console.WriteLine($"Latest prime JSON file: {filename}");
+        }
+      }
+      else
+      {
+        Console.WriteLine("No JSON files found.");
+        filename = string.Empty; // "primes_2.json";
+      }
+
+      string newFileName = GetNextFileName(filename); 
       const string filenameTemplate = "primes_{0}.json";
-      string json = File.Exists(fileName) ? File.ReadAllText(fileName) : string.Empty;
+      string json = File.Exists(filename) ? File.ReadAllText(filename) : string.Empty;
       const string currentFileNameTextFile = "primes-current-Filename.txt";
       string currentFileName = File.Exists(currentFileNameTextFile) ? File.ReadAllText(currentFileNameTextFile) : string.Empty;
       if (string.IsNullOrEmpty(currentFileName))
       {
         try
         {
-          File.WriteAllText(currentFileNameTextFile, fileName);
+          File.WriteAllText(currentFileNameTextFile, newFileName);
         }
         catch (Exception exception)
         {
@@ -36,7 +57,7 @@ namespace ConsoleAppSearchForPrimeToJson
         var beforeLastPrimes = GetLatestPrimesFromJsonFiles(GetAllJsonFilesInDirectory());
         primes.PreviousFileName = beforeLastPrimes.CurrentFileName;
         primes.FirstPrime = beforeLastPrimes.LastPrime;
-        primes.LastPrime = beforeLastPrimes.LastPrime;
+        primes.LastPrime = beforeLastPrimes.LastPrime - 2;
         primes.CurrentFileName = string.Format(filenameTemplate, beforeLastPrimes.LastPrime);
       }
       else
@@ -44,7 +65,7 @@ namespace ConsoleAppSearchForPrimeToJson
         primes.FirstPrime = 1;
         primes.LastPrime = 1;
         primes.PreviousFileName = string.Empty;
-        primes.CurrentFileName = fileName;
+        primes.CurrentFileName = newFileName;
       }
 
       const ulong maxcounter = 10_000_000;
@@ -190,7 +211,7 @@ namespace ConsoleAppSearchForPrimeToJson
         return "primes_2.json";
       }
 
-      ulong nextLastPrime = lastPrime + 1;
+      ulong nextLastPrime = lastPrime + 2;
       return $"primes_{nextLastPrime}.json";
     }
 
@@ -294,6 +315,7 @@ namespace ConsoleAppSearchForPrimeToJson
           primeJsonFiles.Add(file);
         }
       }
+
       return [.. primeJsonFiles];
     }
 
